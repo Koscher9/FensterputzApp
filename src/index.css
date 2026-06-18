@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Base custom styles of mobile app shell */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f7; /* iOS standard gray background */
+  -webkit-tap-highlight-color: transparent;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* iOS Specific Styles */
+.ios-shadow {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.bg-ios-gray {
+  background-color: #f2f2f7;
+}
+
+.ios-blue-text {
+  color: #007aff;
+}
+
+.ios-blue-bg {
+  background-color: #007aff;
+}
+
+/* Custom scrollbars for small elements */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+/* Safe areas support for modern notched iPhones */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
