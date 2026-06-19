@@ -5,10 +5,12 @@ import CustomerList from "./components/CustomerList";
 import CustomerDetail from "./components/CustomerDetail";
 import Calculator from "./components/Calculator";
 import SettingsBackup from "./components/SettingsBackup";
+import Dashboard from "./components/Dashboard";
 import {
   Users,
   Calculator as CalcIcon,
   Settings,
+  LayoutDashboard,
   Sparkles,
   Circle,
 } from "lucide-react";
@@ -32,8 +34,8 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState<
-    "customers" | "calculator" | "settings"
-  >("customers");
+    "dashboard" | "customers" | "calculator" | "settings"
+  >("dashboard");
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
     null,
   );
@@ -266,6 +268,22 @@ export default function App() {
       {/* Main Screen Container */}
       <main className="flex-1 overflow-y-auto px-4 py-4 w-full max-w-xl mx-auto">
         <AnimatePresence mode="wait">
+          {activeTab === "dashboard" && (
+            <motion.div
+              key="tab-dashboard"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Dashboard
+                jobs={jobs}
+                customers={customers}
+                onEditJob={handleEditJob}
+              />
+            </motion.div>
+          )}
+
           {activeTab === "customers" && (
             <motion.div
               key="tab-customers"
@@ -350,6 +368,28 @@ export default function App() {
         className="bg-white/95 backdrop-blur-md border-t border-gray-100/85 px-3 py-3 shrink-0 pb-safe shadow-[0_-4px_14px_rgba(0,0,0,0.03)] sticky bottom-0 z-40"
       >
         <div className="max-w-xl mx-auto flex justify-around">
+          {/* Dashboard Tab Button */}
+          <button
+            onClick={() => {
+              setActiveTab("dashboard");
+              setSelectedCustomerId(null);
+            }}
+            id="tab-btn-dashboard"
+            className={`flex flex-col items-center gap-1 py-1 px-4 rounded-xl transition-all ${
+              activeTab === "dashboard"
+                ? "text-[#007aff]"
+                : "text-gray-400 hover:text-gray-600"
+            }`}
+          >
+            <LayoutDashboard
+              size={20}
+              className={
+                activeTab === "dashboard" ? "stroke-[2.5px]" : "stroke-2"
+              }
+            />
+            <span className="text-[10px] font-bold tracking-wider">Übersicht</span>
+          </button>
+
           {/* Customers Tab Button */}
           <button
             onClick={() => {
