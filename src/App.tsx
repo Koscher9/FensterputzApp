@@ -138,11 +138,23 @@ export default function App() {
   };
 
   const handleSaveJob = (completedJob: Job) => {
-    const updatedJobs = [completedJob, ...jobs];
+    const existingIndex = jobs.findIndex((j) => j.id === completedJob.id);
+    let updatedJobs;
+    if (existingIndex >= 0) {
+      updatedJobs = [...jobs];
+      updatedJobs[existingIndex] = completedJob;
+    } else {
+      updatedJobs = [completedJob, ...jobs];
+    }
     saveJobsToStorage(updatedJobs);
     saveActiveJobToStorage(null);
     setSelectedCustomerId(completedJob.customerId);
     setActiveTab("customers");
+  };
+
+  const handleEditJob = (job: Job) => {
+    saveActiveJobToStorage(job);
+    setActiveTab("calculator");
   };
 
   const handleDeleteJob = (jobId: string) => {
@@ -277,6 +289,7 @@ export default function App() {
                       onDeleteCustomer={handleDeleteCustomer}
                       onStartJob={handleStartNewJob}
                       onDuplicateJob={handleDuplicateJob}
+                      onEditJob={handleEditJob}
                     />
                   );
                 })()

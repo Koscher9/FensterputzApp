@@ -28,6 +28,7 @@ interface CustomerDetailProps {
   onDeleteCustomer: (id: string) => void;
   onStartJob: (customerId: string, templateRooms?: Job["rooms"]) => void;
   onDuplicateJob: (job: Job) => void;
+  onEditJob: (job: Job) => void;
 }
 
 export default function CustomerDetail({
@@ -38,6 +39,7 @@ export default function CustomerDetail({
   onDeleteCustomer,
   onStartJob,
   onDuplicateJob,
+  onEditJob,
 }: CustomerDetailProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(customer.name);
@@ -58,7 +60,7 @@ export default function CustomerDetail({
 
   const totalEarned = customerJobs
     .filter((j) => j.status === "completed")
-    .reduce((sum, j) => sum + j.totalPrice, 0);
+    .reduce((sum, j) => sum + (j.receivedPrice ?? j.agreedPrice ?? j.totalPrice), 0);
 
   const handleSave = () => {
     onEditCustomer({
@@ -487,14 +489,31 @@ export default function CustomerDetail({
                       </div>
                     </div>
 
-                    <div className="text-right">
-                      <span className="block text-md font-bold text-gray-950">
-                        {job.totalPrice.toLocaleString("de-DE", {
-                          style: "currency",
-                          currency: "EUR",
-                        })}
-                      </span>
-                      <span className="inline-block text-[10px] font-bold text-emerald-600 uppercase tracking-widest leading-none mt-0.5">
+                    <div className="text-right flex flex-col items-end justify-center">
+                      {job.receivedPrice !== undefined ? (
+                        <>
+                          <span className="block text-xl font-bold text-[#34c759] leading-none">
+                            {job.receivedPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                          </span>
+                          <span className="block text-[10px] text-gray-400 mt-1">
+                            Vereinbart: {job.agreedPrice !== undefined ? job.agreedPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" }) : job.totalPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                          </span>
+                        </>
+                      ) : job.agreedPrice !== undefined ? (
+                        <>
+                          <span className="block text-xl font-bold text-[#34c759] leading-none">
+                            {job.agreedPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                          </span>
+                          <span className="block text-[10px] text-gray-400 mt-1">
+                            Kalkuliert: {job.totalPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="block text-xl font-bold text-gray-950 leading-none">
+                          {job.totalPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                        </span>
+                      )}
+                      <span className="inline-block text-[10px] font-bold text-emerald-600 uppercase tracking-widest leading-none mt-1.5">
                         Erledigt
                       </span>
                     </div>
@@ -530,15 +549,23 @@ export default function CustomerDetail({
                     </div>
                   )}
 
-                  {/* Use as template button */}
-                  <div className="mt-3 pt-2.5 border-t border-gray-100 flex">
+                  {/* Use as template & edit buttons */}
+                  <div className="mt-3 pt-2.5 border-t border-gray-100 flex gap-2">
                     <button
                       onClick={() => onDuplicateJob(job)}
                       id={`btn-duplicate-job-${job.id}`}
-                      className="w-full flex items-center justify-center gap-1.5 bg-[#007aff]/10 hover:bg-[#007aff]/20 text-[#007aff] font-bold py-2 rounded-xl text-[12.5px] transition-colors"
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-[#007aff]/10 hover:bg-[#007aff]/20 text-[#007aff] font-bold py-2 rounded-xl text-[12.5px] transition-colors"
                     >
                       <Copy size={14} />
-                      Als Vorlage für neuen Besuch nutzen
+                      Vorlage
+                    </button>
+                    <button
+                      onClick={() => onEditJob(job)}
+                      id={`btn-edit-job-${job.id}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 rounded-xl text-[12.5px] transition-colors"
+                    >
+                      <Edit2 size={14} />
+                      Bearbeiten
                     </button>
                   </div>
                 </div>
