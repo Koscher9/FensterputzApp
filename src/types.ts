@@ -18,6 +18,8 @@ export interface Job {
   travelTime?: number; // travel duration in minutes
   cleaningTime?: number; // cleaning duration in minutes
   imageUrl?: string; // Optional image for the job
+  agreedPrice?: number; // ausgemachtes Geld inkl. Anfahrt
+  receivedPrice?: number; // wirklich bekommenes Geld inkl. Trinkgeld
 }
 
 export interface Customer {
@@ -30,15 +32,18 @@ export interface Customer {
   notes: string;
   locationGroup?: string; // e.g. "Regensburg", "Daheim"
   createdAt: string;
+  requiresLadder?: boolean;
+  requiresInvoice?: boolean;
 }
 
 // Default standard rooms proposed for a new job
 export const STANDARD_ROOMS = [
   "Wohnzimmer",
+  "Schlafzimmer",
+  "Esszimmer",
   "Küche",
-  "Elternzimmer",
-  "Kinderzimmer",
   "Bad",
-  "Gang",
+  "Flur",
   "Haustür",
+  "Balkon/Terrasse",
 ];

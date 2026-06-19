@@ -89,48 +89,7 @@ export default function App() {
           ...r,
           id: `room-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
         }))
-      : [
-          {
-            id: "r-d1",
-            name: "Wohnzimmer",
-            width: 1.5,
-            height: 1.4,
-            count: 2,
-            costPerSqM: 2.0,
-          },
-          {
-            id: "r-d2",
-            name: "Küche",
-            width: 1.2,
-            height: 1.0,
-            count: 1,
-            costPerSqM: 2.0,
-          },
-          {
-            id: "r-d3",
-            name: "Elternzimmer",
-            width: 1.5,
-            height: 1.3,
-            count: 2,
-            costPerSqM: 2.0,
-          },
-          {
-            id: "r-d4",
-            name: "Bad",
-            width: 0.8,
-            height: 0.8,
-            count: 1,
-            costPerSqM: 2.0,
-          },
-          {
-            id: "r-d5",
-            name: "Gang",
-            width: 1.0,
-            height: 1.2,
-            count: 1,
-            costPerSqM: 2.0,
-          },
-        ];
+      : [];
 
     const newJob: Job = {
       id: `job-${Date.now()}`,

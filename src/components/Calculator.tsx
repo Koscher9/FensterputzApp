@@ -23,13 +23,14 @@ import { motion, AnimatePresence } from "motion/react";
 const ROOM_PRESETS: {
   [key: string]: { width: number; height: number; count: number };
 } = {
-  Wohnzimmer: { width: 1.5, height: 1.4, count: 2 },
-  Küche: { width: 1.2, height: 1.0, count: 1 },
-  Elternzimmer: { width: 1.5, height: 1.3, count: 2 },
-  Kinderzimmer: { width: 1.2, height: 1.2, count: 1 },
-  Bad: { width: 0.8, height: 0.8, count: 1 },
-  Gang: { width: 1.0, height: 1.2, count: 1 },
-  Haustür: { width: 1.0, height: 2.1, count: 1 },
+  Wohnzimmer: { width: 0, height: 0, count: 1 },
+  Schlafzimmer: { width: 0, height: 0, count: 1 },
+  Esszimmer: { width: 0, height: 0, count: 1 },
+  Küche: { width: 0, height: 0, count: 1 },
+  Bad: { width: 0, height: 0, count: 1 },
+  Flur: { width: 0, height: 0, count: 1 },
+  Haustür: { width: 0, height: 0, count: 1 },
+  "Balkon/Terrasse": { width: 0, height: 0, count: 1 },
 };
 
 const formatDuration = (mins: number) => {
@@ -502,8 +503,8 @@ export default function Calculator({
 
     // Check if preset exists
     const preset = ROOM_PRESETS[finalName];
-    const width = presetWidth ?? preset?.width ?? 1.5;
-    const height = presetHeight ?? preset?.height ?? 1.3;
+    const width = presetWidth ?? preset?.width ?? 0;
+    const height = presetHeight ?? preset?.height ?? 0;
     const count = presetCount ?? preset?.count ?? 1;
 
     const newRoom: RoomEntry = {
@@ -581,6 +582,24 @@ export default function Calculator({
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleUpdateAgreedPrice = (val: string) => {
+    const cleaned = val.replace(",", ".");
+    const parsed = parseFloat(cleaned);
+    onUpdateJob({
+      ...activeJob,
+      agreedPrice: isNaN(parsed) || val === "" ? undefined : parsed,
+    });
+  };
+
+  const handleUpdateReceivedPrice = (val: string) => {
+    const cleaned = val.replace(",", ".");
+    const parsed = parseFloat(cleaned);
+    onUpdateJob({
+      ...activeJob,
+      receivedPrice: isNaN(parsed) || val === "" ? undefined : parsed,
+    });
   };
 
   // Form submit (finish job)
@@ -941,6 +960,51 @@ export default function Calculator({
             </div>
           </div>
         )}
+      </div>
+
+      {/* Pricing Input Section */}
+      <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-4">
+        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1 flex items-center gap-1.5">
+          <Euro size={14} /> Rechnungsbeträge
+        </h3>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Ausgemachtes Geld (inkl. Anfahrt)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                inputMode="decimal"
+                value={activeJob.agreedPrice !== undefined ? activeJob.agreedPrice.toString() : ""}
+                onChange={(e) => handleUpdateAgreedPrice(e.target.value)}
+                placeholder="z.B. 120.00"
+                className="w-full pl-3 pr-8 py-2.5 bg-gray-50 rounded-xl border border-gray-100 text-sm font-semibold focus:outline-none focus:border-[#007aff] focus:ring-1 focus:ring-[#007aff]/30 transition"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">
+                €
+              </span>
+            </div>
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Wirklich bekommenes Geld (inkl. Trinkgeld)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                inputMode="decimal"
+                value={activeJob.receivedPrice !== undefined ? activeJob.receivedPrice.toString() : ""}
+                onChange={(e) => handleUpdateReceivedPrice(e.target.value)}
+                placeholder="z.B. 130.00"
+                className="w-full pl-3 pr-8 py-2.5 bg-gray-50 rounded-xl border border-gray-100 text-sm font-semibold focus:outline-none focus:border-[#007aff] focus:ring-1 focus:ring-[#007aff]/30 transition"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">
+                €
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Action Footer (Save, Reset/Delete) */}

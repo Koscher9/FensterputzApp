@@ -33,6 +33,8 @@ export default function CustomerList({
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [locationGroup, setLocationGroup] = useState("Daheim"); // Default to Daheim
+  const [requiresLadder, setRequiresLadder] = useState(false);
+  const [requiresInvoice, setRequiresInvoice] = useState(false);
 
   const filteredCustomers = customers.filter((c) => {
     const search = searchTerm.toLowerCase();
@@ -80,6 +82,8 @@ export default function CustomerList({
       notes: notes.trim(),
       locationGroup: locationGroup.trim() || "Ohne Zuordnung",
       createdAt: new Date().toISOString(),
+      requiresLadder,
+      requiresInvoice,
     };
 
     onAddCustomer(newCustomer);
@@ -93,6 +97,8 @@ export default function CustomerList({
     setEmail("");
     setNotes("");
     setLocationGroup("Daheim");
+    setRequiresLadder(false);
+    setRequiresInvoice(false);
   };
 
   return (
@@ -249,6 +255,27 @@ export default function CustomerList({
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#007aff] focus:ring-1 focus:ring-[#007aff]/30 resize-none"
               />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={requiresLadder}
+                  onChange={(e) => setRequiresLadder(e.target.checked)}
+                  className="w-4 h-4 text-[#007aff] border-gray-300 rounded focus:ring-[#007aff]"
+                />
+                Leiter benötigt
+              </label>
+              <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={requiresInvoice}
+                  onChange={(e) => setRequiresInvoice(e.target.checked)}
+                  className="w-4 h-4 text-[#007aff] border-gray-300 rounded focus:ring-[#007aff]"
+                />
+                Rechnung erforderlich
+              </label>
             </div>
 
             <div className="flex gap-2 pt-2">

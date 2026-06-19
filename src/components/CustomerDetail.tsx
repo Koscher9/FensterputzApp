@@ -46,6 +46,8 @@ export default function CustomerDetail({
   const [phone, setPhone] = useState(customer.phone);
   const [email, setEmail] = useState(customer.email);
   const [notes, setNotes] = useState(customer.notes);
+  const [requiresLadder, setRequiresLadder] = useState(customer.requiresLadder || false);
+  const [requiresInvoice, setRequiresInvoice] = useState(customer.requiresInvoice || false);
 
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -67,6 +69,8 @@ export default function CustomerDetail({
       phone,
       email,
       notes,
+      requiresLadder,
+      requiresInvoice,
     });
     setIsEditing(false);
   };
@@ -149,8 +153,14 @@ export default function CustomerDetail({
                   {customer.companyName}
                 </span>
               )}
-              <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2 flex-wrap">
                 {customer.name}
+                {customer.requiresLadder && (
+                  <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full" title="Leiter benötigt">🪜 Leiter</span>
+                )}
+                {customer.requiresInvoice && (
+                  <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full" title="Rechnung erforderlich">🧾 Rechnung</span>
+                )}
               </h2>
             </div>
 
@@ -356,6 +366,27 @@ export default function CustomerDetail({
                   className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#007aff] focus:ring-1 focus:ring-[#007aff]/30 transition"
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={requiresLadder}
+                  onChange={(e) => setRequiresLadder(e.target.checked)}
+                  className="w-4 h-4 text-[#007aff] border-gray-300 rounded focus:ring-[#007aff]"
+                />
+                Leiter benötigt
+              </label>
+              <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={requiresInvoice}
+                  onChange={(e) => setRequiresInvoice(e.target.checked)}
+                  className="w-4 h-4 text-[#007aff] border-gray-300 rounded focus:ring-[#007aff]"
+                />
+                Rechnung erforderlich
+              </label>
             </div>
 
             <div>
